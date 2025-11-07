@@ -19,7 +19,7 @@
     "axios": "^1.13.2",
     "node-fetch": "^3.3.2",
     "shell-quote": "^1.8.3",
-    "zod": "^3.24.4"
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@types/bun": "1.2.11",
