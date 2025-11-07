@@ -2,6 +2,8 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+**Repository**: `step-security/claude-code-action`
+
 ## Development Tools
 
 - Runtime: Bun 1.2.11

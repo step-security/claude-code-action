@@ -18,14 +18,47 @@ A general-purpose [Claude Code](https://claude.ai/code) action for GitHub PRs an
 
 ## Quickstart
 
-The easiest way to set up this action is through [Claude Code](https://claude.ai/code) in the terminal. Just open `claude` and run `/install-github-app`.
+### Option 1: Manual Setup (Recommended for Step Security Fork)
 
-This command will guide you through setting up the GitHub app and required secrets.
+**To use this action in your own repository:**
+
+1. Choose a workflow template from the [Ready-to-Use Examples](#-ready-to-use-workflow-examples) below
+2. Copy it to your `.github/workflows/` directory
+3. Add your `ANTHROPIC_API_KEY` to repository secrets
+4. Customize triggers and permissions as needed
+
+## 🔧 Ready-to-Use Workflow Examples
+
+Copy any of these complete workflow examples to your `.github/workflows/` directory:
+
+### Core Workflows
+
+- **[`claude.yml`](./examples/claude.yml)** - Basic Claude interaction with `@claude` mentions
+- **[`issue-triage.yml`](./examples/issue-triage.yml)** - Automatic issue labeling when issues are created
+
+### PR Review Automation
+
+- **[`pr-review-comprehensive.yml`](./examples/pr-review-comprehensive.yml)** - Complete PR analysis with inline comments
+- **[`pr-review-filtered-authors.yml`](./examples/pr-review-filtered-authors.yml)** - Review only PRs from specific authors
+- **[`pr-review-filtered-paths.yml`](./examples/pr-review-filtered-paths.yml)** - Review only when specific files/directories change
+
+### Issue Management
+
+- **[`issue-deduplication.yml`](./examples/issue-deduplication.yml)** - Detect and manage duplicate issues
+
+### CI/CD Integration
+
+- **[`ci-failure-auto-fix.yml`](./examples/ci-failure-auto-fix.yml)** - Automatically analyze and suggest fixes for CI failures
+- **[`manual-code-analysis.yml`](./examples/manual-code-analysis.yml)** - On-demand code quality analysis
+
+### Option 2: Original Anthropic Setup
+
+Alternatively, you can use the original setup method through [Claude Code](https://claude.ai/code) terminal with `/install-github-app`, but this will install the original `anthropics/claude-code-action`.
 
 **Note**:
 
-- You must be a repository admin to install the GitHub app and add secrets
-- This quickstart method is only available for direct Anthropic API users. For AWS Bedrock or Google Vertex AI setup, see [docs/cloud-providers.md](./docs/cloud-providers.md).
+- You must be a repository admin to install GitHub apps and add secrets
+- For AWS Bedrock or Google Vertex AI setup, see [docs/cloud-providers.md](./docs/cloud-providers.md)
 
 ## 📚 Solutions & Use Cases
 
