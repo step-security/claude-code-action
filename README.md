@@ -18,7 +18,7 @@ A general-purpose [Claude Code](https://claude.ai/code) action for GitHub PRs an
 
 ## Quickstart
 
-### Option 1: Manual Setup (Recommended for Step Security Fork)
+### Option 1: Manual Setup (Recommended for StepSecurity Maintained Action)
 
 **To use this action in your own repository:**
 
