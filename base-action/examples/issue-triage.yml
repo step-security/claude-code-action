@@ -106,4 +106,3 @@ jobs:
           claude_args: |
             --mcp-config /tmp/mcp-config/mcp-servers.json
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-  

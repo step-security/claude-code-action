@@ -75,7 +75,7 @@ Both AWS Bedrock and GCP Vertex AI require OIDC authentication.
 ```yaml
 # For GCP Vertex AI with OIDC
 - name: Authenticate to Google Cloud
-  uses: google-github-actions/auth@v2
+  uses: step-security/google-github-auth@v3
   with:
     workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
     service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
