@@ -10,15 +10,15 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@actions/core": "^2.0.0",
-    "axios": "^1.13.2",
-    "shell-quote": "^1.8.3"
+    "@actions/core": "^2.0.3",
+    "axios": "^1.16.1",
+    "shell-quote": "^1.8.4"
   },
   "devDependencies": {
-    "@types/bun": "^1.2.12",
-    "@types/node": "^20.0.0",
+    "@types/bun": "1.2.11",
+    "@types/node": "^20.19.41",
     "@types/shell-quote": "^1.7.5",
     "prettier": "3.5.3",
-    "typescript": "^5.8.3"
+    "typescript": "^5.9.3"
   }
 }
