@@ -7,13 +7,6 @@ on:
     branches: [main]
   workflow_dispatch:
 
-# The Claude API is authenticated via workload identity federation: id-token
-# lets the action mint the GitHub OIDC token it exchanges for a short-lived
-# access token. See docs/setup.md.
-permissions:
-  contents: read
-  id-token: write
-
 jobs:
   test-mcp-integration:
     runs-on: ubuntu-latest
@@ -40,9 +33,7 @@ jobs:
         id: claude-test
         with:
           prompt: "Call the test_tool tool and report its response."
-          anthropic_federation_rule_id: ${{ vars.ANTHROPIC_FEDERATION_RULE_ID }}
-          anthropic_organization_id: ${{ vars.ANTHROPIC_ORGANIZATION_ID }}
-          anthropic_service_account_id: ${{ vars.ANTHROPIC_SERVICE_ACCOUNT_ID }}
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           claude_args: --allowedTools mcp__test-server__test_tool
         env:
           # Change to test directory so it finds .mcp.json
@@ -137,9 +128,7 @@ jobs:
         id: claude-config-test
         with:
           prompt: "Call the test_tool tool and report its response."
-          anthropic_federation_rule_id: ${{ vars.ANTHROPIC_FEDERATION_RULE_ID }}
-          anthropic_organization_id: ${{ vars.ANTHROPIC_ORGANIZATION_ID }}
-          anthropic_service_account_id: ${{ vars.ANTHROPIC_SERVICE_ACCOUNT_ID }}
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           claude_args: |
             --allowedTools mcp__test-server__test_tool
             --mcp-config '{"mcpServers":{"test-server":{"type":"stdio","command":"bun","args":["simple-mcp-server.ts"],"env":{}}}}'
