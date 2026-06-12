@@ -97,7 +97,7 @@ By default, commits made by Claude are unsigned. You can enable commit signing u
 This uses GitHub's API to create commits, which automatically signs them as verified from the GitHub App:
 
 ```yaml
-- uses: step-security/claude-code-action@main
+- uses: step-security/claude-code-action@v1
   with:
     use_commit_signing: true
 ```
@@ -109,7 +109,7 @@ This is the simplest option and requires no additional setup. However, because i
 This uses an SSH key to sign commits via git CLI. Use this option when you need both signed commits AND standard git operations (rebasing, cherry-picking, etc.):
 
 ```yaml
-- uses: step-security/claude-code-action@main
+- uses: step-security/claude-code-action@v1
   with:
     ssh_signing_key: ${{ secrets.SSH_SIGNING_KEY }}
     bot_id: "YOUR_GITHUB_USER_ID"
