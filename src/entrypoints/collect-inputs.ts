@@ -1,6 +1,4 @@
-import * as core from "@actions/core";
-
-export function collectActionInputsPresence(): void {
+export function collectActionInputsPresence(): string {
   const inputDefaults: Record<string, string> = {
     trigger_phrase: "@claude",
     assignee_trigger: "",
@@ -22,18 +20,23 @@ export function collectActionInputsPresence(): void {
     settings: "",
     anthropic_api_key: "",
     claude_code_oauth_token: "",
+    anthropic_federation_rule_id: "",
+    anthropic_organization_id: "",
+    anthropic_service_account_id: "",
+    anthropic_workspace_id: "",
+    anthropic_oidc_audience: "",
     github_token: "",
     max_turns: "",
     use_sticky_comment: "false",
+    classify_inline_comments: "true",
     use_commit_signing: "false",
-    experimental_allowed_domains: "",
+    ssh_signing_key: "",
   };
 
   const allInputsJson = process.env.ALL_INPUTS;
   if (!allInputsJson) {
     console.log("ALL_INPUTS environment variable not found");
-    core.setOutput("action_inputs_present", JSON.stringify({}));
-    return;
+    return JSON.stringify({});
   }
 
   let allInputs: Record<string, string>;
@@ -41,8 +44,7 @@ export function collectActionInputsPresence(): void {
     allInputs = JSON.parse(allInputsJson);
   } catch (e) {
     console.error("Failed to parse ALL_INPUTS JSON:", e);
-    core.setOutput("action_inputs_present", JSON.stringify({}));
-    return;
+    return JSON.stringify({});
   }
 
   const presentInputs: Record<string, boolean> = {};
@@ -54,5 +56,5 @@ export function collectActionInputsPresence(): void {
     presentInputs[name] = isSet;
   }
 
-  core.setOutput("action_inputs_present", JSON.stringify(presentInputs));
+  return JSON.stringify(presentInputs);
 }

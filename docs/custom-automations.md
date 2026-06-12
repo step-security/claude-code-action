@@ -26,6 +26,8 @@ This action supports the following GitHub events ([learn more GitHub event trigg
 
 ## Automated Documentation Updates
 
+Automatically update documentation when specific files change (see [`examples/claude-pr-path-specific.yml`](../examples/claude-pr-path-specific.yml)):
+
 ```yaml
 on:
   pull_request:
@@ -44,6 +46,8 @@ steps:
 When API files are modified, the action automatically detects that a `prompt` is provided and runs in agent mode. Claude updates your README with the latest endpoint documentation and pushes the changes back to the PR, keeping your docs in sync with your code.
 
 ## Author-Specific Code Reviews
+
+Automatically review PRs from specific authors or external contributors (see [`examples/claude-review-from-author.yml`](../examples/claude-review-from-author.yml)):
 
 ```yaml
 on:

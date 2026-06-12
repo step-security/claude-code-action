@@ -29,3 +29,5 @@
 3. **Smart Responses**: Either answers questions or implements changes
 4. **Branch Management**: Creates new PRs for human authors, pushes directly for Claude's own PRs
 5. **Communication**: Posts updates at every step to keep you informed
+
+This action is built on top of [`step-security/claude-code-base-action`](https://github.com/step-security/claude-code-base-action).

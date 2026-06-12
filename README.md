@@ -4,7 +4,7 @@
 
 # Claude Code Action
 
-A general-purpose [Claude Code](https://claude.ai/code) action for GitHub PRs and issues that can answer questions and implement code changes. This action intelligently detects when to activate based on your workflow context—whether responding to @claude mentions, issue assignments, or executing automation tasks with explicit prompts. It supports multiple authentication methods including Anthropic direct API, Amazon Bedrock, and Google Vertex AI.
+A general-purpose [Claude Code](https://claude.ai/code) action for GitHub PRs and issues that can answer questions and implement code changes. This action intelligently detects when to activate based on your workflow context—whether responding to @claude mentions, issue assignments, or executing automation tasks with explicit prompts. It supports multiple authentication methods including Anthropic direct API (API key or workload identity federation), Amazon Bedrock, Google Vertex AI, and Microsoft Foundry.
 
 ## Features
 
@@ -17,6 +17,7 @@ A general-purpose [Claude Code](https://claude.ai/code) action for GitHub PRs an
 - 📋 **Progress Tracking**: Visual progress indicators with checkboxes that dynamically update as Claude completes tasks
 - 🏃 **Runs on Your Infrastructure**: The action executes entirely on your own GitHub runner (Anthropic API calls go to your chosen provider)
 - ⚙️ **Simplified Configuration**: Unified `prompt` and `claude_args` inputs provide clean, powerful configuration aligned with Claude Code SDK
+- 📊 **Structured Outputs**: Get validated JSON results that automatically become GitHub Action outputs for complex automations
 
 ## Quickstart
 
@@ -60,7 +61,7 @@ Alternatively, you can use the original setup method through [Claude Code](https
 **Note**:
 
 - You must be a repository admin to install GitHub apps and add secrets
-- For AWS Bedrock or Google Vertex AI setup, see [docs/cloud-providers.md](./docs/cloud-providers.md)
+- For AWS Bedrock, Google Vertex AI, or Microsoft Foundry setup, see [docs/cloud-providers.md](./docs/cloud-providers.md)
 
 ## 📚 Solutions & Use Cases
 
@@ -87,7 +88,7 @@ Each solution includes complete working examples, configuration details, and exp
 - [Custom Automations](./docs/custom-automations.md) - Examples of automated workflows and custom prompts
 - [Configuration](./docs/configuration.md) - MCP servers, permissions, environment variables, and advanced settings
 - [Experimental Features](./docs/experimental.md) - Execution modes and network restrictions
-- [Cloud Providers](./docs/cloud-providers.md) - AWS Bedrock and Google Vertex AI setup
+- [Cloud Providers](./docs/cloud-providers.md) - AWS Bedrock, Google Vertex AI, and Microsoft Foundry setup
 - [Capabilities & Limitations](./docs/capabilities-and-limitations.md) - What Claude can and cannot do
 - [Security](./docs/security.md) - Access control, permissions, and commit signing
 - [FAQ](./docs/faq.md) - Common questions and troubleshooting
