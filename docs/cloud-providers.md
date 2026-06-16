@@ -84,7 +84,7 @@ AWS Bedrock, GCP Vertex AI, and Microsoft Foundry all support OIDC authenticatio
 ```yaml
 # For GCP Vertex AI with OIDC
 - name: Authenticate to Google Cloud
-  uses: google-github-actions/auth@v2
+  uses: step-security/google-github-auth@v3
   with:
     workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
     service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
@@ -110,7 +110,7 @@ AWS Bedrock, GCP Vertex AI, and Microsoft Foundry all support OIDC authenticatio
 ```yaml
 # For Microsoft Foundry with OIDC
 - name: Authenticate to Azure
-  uses: azure/login@v2
+  uses: step-security/azure-login@v2
   with:
     client-id: ${{ secrets.AZURE_CLIENT_ID }}
     tenant-id: ${{ secrets.AZURE_TENANT_ID }}

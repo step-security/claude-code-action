@@ -491,7 +491,7 @@ Use provider-specific model names based on your chosen provider:
 
 # For Google Vertex AI (requires OIDC authentication)
 - name: Authenticate to Google Cloud
-  uses: google-github-actions/auth@v2
+  uses: step-security/google-github-auth@v3
   with:
     workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
     service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
@@ -530,7 +530,7 @@ This example shows how to use OIDC authentication with GCP Vertex AI:
 
 ```yaml
 - name: Authenticate to Google Cloud
-  uses: google-github-actions/auth@v2
+  uses: step-security/google-github-auth@v3
   with:
     workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
     service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
