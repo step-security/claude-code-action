@@ -19,18 +19,24 @@ const defaultInputs = {
   labelTrigger: "",
   branchPrefix: "claude/",
   useStickyComment: false,
+  classifyInlineComments: true,
   useCommitSigning: false,
+  sshSigningKey: "",
   botId: String(CLAUDE_APP_BOT_ID),
   botName: CLAUDE_BOT_LOGIN,
   allowedBots: "",
   allowedNonWriteUsers: "",
   trackProgress: false,
+  includeFixLinks: true,
+  includeCommentsByActor: "",
+  excludeCommentsByActor: "",
 };
 
 const defaultRepository = {
   owner: "test-owner",
   repo: "test-repo",
   full_name: "test-owner/test-repo",
+  default_branch: "main",
 };
 
 type MockContextOverrides = Omit<Partial<ParsedGitHubContext>, "inputs"> & {
@@ -53,7 +59,12 @@ export const createMockContext = (
   };
 
   const mergedInputs = overrides.inputs
-    ? { ...defaultInputs, ...overrides.inputs }
+    ? {
+        ...defaultInputs,
+        ...overrides.inputs,
+        includeCommentsByActor: overrides.inputs.includeCommentsByActor ?? "",
+        excludeCommentsByActor: overrides.inputs.excludeCommentsByActor ?? "",
+      }
     : defaultInputs;
 
   return { ...baseContext, ...overrides, inputs: mergedInputs };
@@ -77,7 +88,12 @@ export const createMockAutomationContext = (
   };
 
   const mergedInputs = overrides.inputs
-    ? { ...defaultInputs, ...overrides.inputs }
+    ? {
+        ...defaultInputs,
+        ...overrides.inputs,
+        includeCommentsByActor: overrides.inputs.includeCommentsByActor ?? "",
+        excludeCommentsByActor: overrides.inputs.excludeCommentsByActor ?? "",
+      }
     : { ...defaultInputs };
 
   return { ...baseContext, ...overrides, inputs: mergedInputs };
@@ -365,6 +381,53 @@ export const mockPullRequestReviewContext: ParsedGitHubContext = {
     review: {
       id: 11122233,
       body: "@claude can you check if the error handling is comprehensive enough in this PR?",
+      user: {
+        login: "senior-developer",
+        id: 44444,
+        avatar_url: "https://avatars.githubusercontent.com/u/44444",
+        html_url: "https://github.com/senior-developer",
+      },
+      state: "approved",
+      html_url:
+        "https://github.com/test-owner/test-repo/pull/321#pullrequestreview-11122233",
+      submitted_at: "2024-01-15T15:30:00Z",
+    },
+    pull_request: {
+      number: 321,
+      title: "Refactor: Improve error handling in API layer",
+      body: "This PR improves error handling across all API endpoints",
+      user: {
+        login: "backend-developer",
+        id: 33333,
+        avatar_url: "https://avatars.githubusercontent.com/u/33333",
+        html_url: "https://github.com/backend-developer",
+      },
+    },
+    repository: {
+      name: "test-repo",
+      full_name: "test-owner/test-repo",
+      private: false,
+      owner: {
+        login: "test-owner",
+      },
+    },
+  } as PullRequestReviewEvent,
+  entityNumber: 321,
+  isPR: true,
+  inputs: { ...defaultInputs, triggerPhrase: "@claude" },
+};
+
+export const mockPullRequestReviewWithoutCommentContext: ParsedGitHubContext = {
+  runId: "1234567890",
+  eventName: "pull_request_review",
+  eventAction: "dismissed",
+  repository: defaultRepository,
+  actor: "senior-developer",
+  payload: {
+    action: "submitted",
+    review: {
+      id: 11122233,
+      body: null, // Simulating approval without comment
       user: {
         login: "senior-developer",
         id: 44444,

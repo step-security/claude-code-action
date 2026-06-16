@@ -12,10 +12,24 @@ export const PR_QUERY = `
         baseRefName
         headRefName
         headRefOid
+        isCrossRepository
+        headRepository {
+          owner {
+            login
+          }
+          name
+        }
         createdAt
+        updatedAt
+        lastEditedAt
         additions
         deletions
         state
+        labels(first: 100) {
+          nodes {
+            name
+          }
+        }
         commits(first: 100) {
           totalCount
           nodes {
@@ -96,7 +110,14 @@ export const ISSUE_QUERY = `
           login
         }
         createdAt
+        updatedAt
+        lastEditedAt
         state
+        labels(first: 100) {
+          nodes {
+            name
+          }
+        }
         comments(first: 100) {
           nodes {
             id
