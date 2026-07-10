@@ -58,7 +58,7 @@ jobs:
     if: github.event_name != 'issue_comment' || github.event.issue.pull_request
     runs-on: ubuntu-latest
     steps:
-      - uses: step-security/claude-code-action/agent-approval-check@main
+      - uses: step-security/claude-code-action/agent-approval-check@v1
         with:
           required_approvals: 2
           agent_emails: noreply@anthropic.com
