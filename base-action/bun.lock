@@ -5,7 +5,7 @@
       "name": "@step-security/claude-code-base-action",
       "dependencies": {
         "@actions/core": "^2.0.3",
-        "@anthropic-ai/claude-agent-sdk": "^0.3.206",
+        "@anthropic-ai/claude-agent-sdk": "^0.3.205",
         "axios": "^1.16.1",
         "shell-quote": "^1.8.4",
       },
