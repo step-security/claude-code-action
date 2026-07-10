@@ -92,7 +92,7 @@ const results = await pipeline(
   prs,
   (n) =>
     agent(
-      `You are reviewing open PR #${n} on anthropics/claude-code-action to decide if it is safe for a maintainer to approve ("stamp") with minimal further discussion.
+      `You are reviewing open PR #${n} on step-security/claude-code-action to decide if it is safe for a maintainer to approve ("stamp") with minimal further discussion.
 
 The full PR (metadata, body, existing reviews/comments, and complete diff) is in /tmp/claude/pr-sweep/${n}.md — read it first. The repo is checked out at the current working directory. Read the actual current source files the diff touches to verify the diff applies cleanly conceptually and the claims in the PR body are true. Do NOT modify anything or run git commands that change state.
 
@@ -121,7 +121,7 @@ Return structured output only.`,
     if (!review) return null;
     if (review.verdict !== "stamp") return { review, verify: null };
     return agent(
-      `You are an adversarial security skeptic. Another reviewer recommended APPROVING open PR #${n} on anthropics/claude-code-action. Your job is to REFUTE that recommendation — find any reason it should NOT be stamped.
+      `You are an adversarial security skeptic. Another reviewer recommended APPROVING open PR #${n} on step-security/claude-code-action. Your job is to REFUTE that recommendation — find any reason it should NOT be stamped.
 
 Their assessment: ${JSON.stringify(review)}
 

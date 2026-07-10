@@ -111,7 +111,7 @@ WRITE_ACCESS_ASSOCIATIONS = frozenset({"OWNER", "MEMBER", "COLLABORATOR"})
 WRITE_PERMISSION_LEVELS = frozenset({"write", "push", "maintain", "admin"})
 DOCS_URL = (
     os.environ.get("DOCS_URL")
-    or "https://github.com/anthropics/claude-code-action/tree/main/agent-approval-check"
+    or "https://github.com/step-security/claude-code-action/tree/main/agent-approval-check"
 )
 
 

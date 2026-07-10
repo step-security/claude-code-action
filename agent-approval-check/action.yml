@@ -44,7 +44,7 @@ inputs:
     default: ""
   docs_url:
     description: Link shown in the PR comment footer.
-    default: "https://github.com/anthropics/claude-code-action/tree/main/agent-approval-check"
+    default: "https://github.com/step-security/claude-code-action/tree/main/agent-approval-check"
 
 runs:
   using: composite
