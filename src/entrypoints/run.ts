@@ -192,7 +192,6 @@ async function validateSubscription(): Promise<void> {
   }
 }
 
-
 async function run() {
   await validateSubscription();
   let githubToken: string | undefined;
