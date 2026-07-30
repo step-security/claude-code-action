@@ -27,7 +27,7 @@ function extractFirstLabel(githubData: FetchDataResult): string | undefined {
  * This prevents command injection by ensuring only safe characters are used.
  *
  * Valid branch names:
- * - Start with alphanumeric character or @ (not dash, to prevent option injection)
+ * - Start with alphanumeric character, underscore, or @ (not dash, to prevent option injection)
  * - Contain only alphanumeric, forward slash, hyphen, underscore, period, hash (#), plus (+), comma (,), or at sign (@)
  * - Do not start or end with a period
  * - Do not end with a slash
