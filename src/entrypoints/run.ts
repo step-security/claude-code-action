@@ -76,7 +76,7 @@ async function installClaudeCode(): Promise<string> {
     return customExecutable;
   }
 
-  const claudeCodeVersion = "2.1.203";
+  const claudeCodeVersion = "2.1.220";
   console.log(`Installing Claude Code v${claudeCodeVersion}...`);
 
   for (let attempt = 1; attempt <= 3; attempt++) {
@@ -366,7 +366,8 @@ async function run() {
   } finally {
     // Phase 4: Cleanup (always runs)
 
-    // Stop refreshing the workload identity token file
+    // Stop refreshing the workload identity token file and delete the token
+    // material so it doesn't outlive this step
     workloadIdentity?.stop();
 
     // Update tracking comment
