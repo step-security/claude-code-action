@@ -13,9 +13,16 @@ on:
         default: "List the files in the current directory starting with 'package'"
   workflow_call:
 
+# Pin the model so these tests don't depend on the CLI's default model,
+# which can change with each Claude Code release.
+env:
+  ANTHROPIC_MODEL: claude-opus-5
+
 jobs:
   test-inline-prompt:
-    runs-on: ubuntu-latest
+    # Skip on fork PRs since they can't access secrets for Claude API auth
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04-firewall
     steps:
       - name: Harden the runner (Audit all outbound calls)
         uses: step-security/harden-runner@95d9a5deda9de15063e7595e9719c11c38c90ae2 # v2.13.2
@@ -30,7 +37,7 @@ jobs:
         with:
           prompt: ${{ github.event.inputs.test_prompt || 'List the files in the current directory starting with "package"' }}
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          allowed_tools: "LS,Read"
+          claude_args: '--allowedTools "LS,Read" --permission-mode auto'
 
       - name: Verify inline prompt output
         run: |
@@ -69,7 +76,9 @@ jobs:
           fi
 
   test-prompt-file:
-    runs-on: ubuntu-latest
+    # Skip on fork PRs since they can't access secrets for Claude API auth
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04-firewall
     steps:
       - name: Harden the runner (Audit all outbound calls)
         uses: step-security/harden-runner@95d9a5deda9de15063e7595e9719c11c38c90ae2 # v2.13.2
@@ -92,7 +101,7 @@ jobs:
         with:
           prompt_file: "test-prompt.txt"
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          allowed_tools: "LS,Read"
+          claude_args: '--allowedTools "LS,Read" --permission-mode auto'
 
       - name: Verify prompt file output
         run: |
