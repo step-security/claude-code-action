@@ -8,8 +8,15 @@ on:
   workflow_dispatch:
   workflow_call:
 
+# Pin the model so these tests don't depend on the CLI's default model,
+# which can change with each Claude Code release.
+env:
+  ANTHROPIC_MODEL: claude-opus-5
+
 jobs:
   test-settings-inline-allow:
+    # Skip on fork PRs since they can't mint the OIDC token used for Claude API auth
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
       - name: Harden the runner (Audit all outbound calls)
@@ -26,6 +33,7 @@ jobs:
           prompt: |
             Use Bash to echo "Hello from settings test"
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          claude_args: "--permission-mode auto"
           settings: |
             {
               "permissions": {
@@ -64,6 +72,8 @@ jobs:
           fi
 
   test-settings-inline-deny:
+    # Skip on fork PRs since they can't mint the OIDC token used for Claude API auth
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
       - name: Harden the runner (Audit all outbound calls)
@@ -80,6 +90,7 @@ jobs:
           prompt: |
             Run the command `echo $HOME` to check the home directory path
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          claude_args: "--permission-mode auto"
           settings: |
             {
               "permissions": {
@@ -101,6 +112,8 @@ jobs:
           fi
 
   test-settings-file-allow:
+    # Skip on fork PRs since they can't mint the OIDC token used for Claude API auth
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
       - name: Harden the runner (Audit all outbound calls)
@@ -127,6 +140,7 @@ jobs:
           prompt: |
             Use Bash to echo "Hello from settings file test"
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          claude_args: "--permission-mode auto"
           settings: "test-settings.json"
 
       - name: Verify echo worked
@@ -160,6 +174,8 @@ jobs:
           fi
 
   test-settings-file-deny:
+    # Skip on fork PRs since they can't mint the OIDC token used for Claude API auth
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
       - name: Harden the runner (Audit all outbound calls)
@@ -186,6 +202,7 @@ jobs:
           prompt: |
             Run the command `echo $HOME` to check the home directory path
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          claude_args: "--permission-mode auto"
           settings: "test-settings.json"
 
       - name: Verify echo was denied

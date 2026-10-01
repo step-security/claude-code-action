@@ -44,3 +44,16 @@ Single entrypoint: `src/entrypoints/run.ts` orchestrates everything — prepare 
 - `moduleResolution: "bundler"` — imports don't need `.js` extensions.
 - GitHub API calls should use retry logic (`src/utils/retry.ts`).
 - MCP servers are auto-installed at runtime to `~/.claude/mcp/github-{type}-server/`.
+
+## Security hardening for GitHub Actions
+
+Workflow jobs in this repository that call Claude run with two protections. Keep them when you add or edit a workflow.
+
+1. **Harden-runner (audit mode).** Every job uses `step-security/harden-runner` with `egress-policy: audit` to log all outbound network calls. This provides visibility without blocking.
+2. **Auto permission mode.** Every step that runs the Claude Code action (`uses: step-security/claude-code-action`, or this repository's own `./` and `./base-action`) passes `--permission-mode auto` in `claude_args`. A tool call that needs permission and that the allowed tools do not cover then runs only if Claude Code's safety review passes it. Allow only the tools the job needs, and keep any `--disallowedTools` list a step has. Use `claude-opus-4-6` or a newer model: on an older one Claude Code falls back to its default permission mode.
+
+`claude.yml` answers `@claude` mentions. The Claude Code action sets `--permission-mode acceptEdits` for those, and the `--permission-mode auto` in the workflow's `claude_args`, which comes after it, replaces it.
+
+`.github/workflows/workflow-hardening.yml` fails when a job that runs the Claude Code action or mentions `ANTHROPIC_FEDERATION_RULE_ID` breaks protection 2. It cannot see a job that calls Claude another way, so check new workflows by hand too. If a job cannot meet protection 2, add it with the reason to `EXEMPT_FROM_AUTO_MODE` in `.github/scripts/check_workflow_hardening.py`. A job listed there must set no permission mode at all. Do not skip or weaken the check.
+
+Keep each workflow's `permissions:` block minimal, and never print tokens or environment variables in workflow logs.

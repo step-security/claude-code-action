@@ -8,8 +8,15 @@ on:
   workflow_dispatch:
   workflow_call:
 
+# Pin the model so these tests don't depend on the CLI's default model,
+# which can change with each Claude Code release.
+env:
+  ANTHROPIC_MODEL: claude-opus-5
+
 jobs:
   test-mcp-integration:
+    # Skip on fork PRs since they can't mint the OIDC token used for Claude API auth
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
       - name: Harden the runner (Audit all outbound calls)
@@ -35,7 +42,7 @@ jobs:
         with:
           prompt: "Call the test_tool tool and report its response."
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          claude_args: --allowedTools mcp__test-server__test_tool
+          claude_args: --allowedTools mcp__test-server__test_tool --permission-mode auto
         env:
           # Change to test directory so it finds .mcp.json
           CLAUDE_WORKING_DIR: ${{ github.workspace }}/base-action/test/mcp-test
@@ -93,6 +100,8 @@ jobs:
           echo "✓ All MCP server checks passed!"
 
   test-mcp-config-flag:
+    # Skip on fork PRs since they can't mint the OIDC token used for Claude API auth
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
       - name: Harden the runner (Audit all outbound calls)
@@ -131,6 +140,7 @@ jobs:
           prompt: "Call the test_tool tool and report its response."
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           claude_args: |
+            --permission-mode auto
             --allowedTools mcp__test-server__test_tool
             --mcp-config '{"mcpServers":{"test-server":{"type":"stdio","command":"bun","args":["simple-mcp-server.ts"],"env":{}}}}'
         env:

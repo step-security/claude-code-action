@@ -8,8 +8,15 @@ on:
   workflow_dispatch:
   workflow_call:
 
+# Pin the model so these tests don't depend on the CLI's default model,
+# which can change with each Claude Code release.
+env:
+  ANTHROPIC_MODEL: claude-opus-5
+
 jobs:
   test-custom-executables:
+    # Skip on fork PRs since they can't mint the OIDC token used for Claude API auth
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
       - name: Harden the runner (Audit all outbound calls)
@@ -58,7 +65,7 @@ jobs:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           path_to_claude_code_executable: /home/runner/.local/bin/claude
           path_to_bun_executable: /home/runner/.bun/bin/bun
-          allowed_tools: "LS,Read"
+          claude_args: '--allowedTools "LS,Read" --permission-mode auto'
 
       - name: Verify custom executables worked
         run: |
