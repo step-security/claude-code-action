@@ -7,8 +7,8 @@ allow:
   # short-lived API token, and fetching the Claude GitHub App's token in claude.yml and
   # claude-review.yml
   - api.anthropic.com
-  # GitHub API: calls made by the Claude Code action, by gh in scripts/gh.sh and
-  # scripts/edit-issue-labels.sh, and by the /review-pr command
+  # GitHub: checkout (git clone) and GitHub API calls made by the Claude Code action
+  - github.com
   - api.github.com
   # Claude Code install script: fetched by the Claude Code action, and by
   # test-custom-executables.yml ("Install Claude Code manually")

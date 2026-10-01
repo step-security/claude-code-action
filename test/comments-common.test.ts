@@ -10,7 +10,11 @@ import { GITHUB_SERVER_URL } from "../src/github/api/config";
 describe("comments/common", () => {
   describe("createJobRunLink", () => {
     test("builds a markdown link to the workflow run", () => {
-      const result = createJobRunLink("step-security", "claude-code-action", "42");
+      const result = createJobRunLink(
+        "step-security",
+        "claude-code-action",
+        "42",
+      );
       expect(result).toBe(
         `[View job run](${GITHUB_SERVER_URL}/step-security/claude-code-action/actions/runs/42)`,
       );
