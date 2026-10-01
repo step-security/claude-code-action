@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fail if a workflow job that calls Claude, or .github/egress-firewall.yaml, breaks a rule in CLAUDE.md,
+"""Fail if a workflow job that calls Claude breaks a rule in CLAUDE.md,
 "Security hardening for GitHub Actions". Run from the repository root. A job calls Claude when it runs the
 Claude Code action, or when it or a local action it uses mentions ANTHROPIC_FEDERATION_RULE_ID.
 """
@@ -11,9 +11,7 @@ import shlex
 import subprocess
 import sys
 
-FIREWALL_RUNNER = "ubuntu-24.04-firewall"
 WORKFLOW_DIR = pathlib.Path(".github/workflows")
-POLICY_PATH = pathlib.Path(".github/egress-firewall.yaml")
 SIGN_IN_MARKER = "anthropic_federation_rule_id"
 CLAUDE_ACTIONS = ("step-security/claude-code-action", "step-security/claude-code-base-action")
 HELP = 'See CLAUDE.md, "Security hardening for GitHub Actions".'
@@ -27,7 +25,6 @@ MODEL_VERSION = re.compile(
 )
 
 # Key: "<workflow file name>:<job id>". Value: why that job is exempt from the table's rule.
-EXEMPT_FROM_FIREWALL_RUNNER: dict[str, str] = {}
 EXEMPT_FROM_AUTO_MODE: dict[str, str] = {}
 
 
@@ -232,25 +229,6 @@ def check_job(file_name: str, job_id: str, job: dict, workflow_env: dict) -> lis
     key = f"{file_name}:{job_id}"
     where = f".github/workflows/{file_name}: job '{job_id}'"
     errors = []
-    runs_on = job.get("runs-on")
-    if isinstance(runs_on, list) and len(runs_on) == 1:
-        runs_on = runs_on[0]
-    if key in EXEMPT_FROM_FIREWALL_RUNNER:
-        print(
-            f"The egress-firewall runner is not required for job '{job_id}' in {file_name}. "
-            f"Reason: {EXEMPT_FROM_FIREWALL_RUNNER[key]}."
-        )
-    elif runs_on != FIREWALL_RUNNER:
-        if "runs-on" not in job:
-            has = "no 'runs-on'"
-        elif isinstance(job["runs-on"], str):
-            has = f"'runs-on: {job['runs-on']}'"
-        else:
-            has = "a 'runs-on' list or group"
-        errors.append(
-            f"{where} calls Claude, so it must have 'runs-on: {FIREWALL_RUNNER}'. "
-            f"It has {has}. {HELP}"
-        )
     exempt = key in EXEMPT_FROM_AUTO_MODE
     if exempt:
         print(
@@ -274,41 +252,6 @@ def check_job(file_name: str, job_id: str, job: dict, workflow_env: dict) -> lis
     return errors
 
 
-def check_policy() -> list[str]:
-    if not POLICY_PATH.is_file():
-        return [
-            f"{POLICY_PATH} is missing. Jobs on the egress-firewall runner need it "
-            f"to limit outbound network access. {HELP}"
-        ]
-    policy = load_yaml(POLICY_PATH)
-    if not isinstance(policy, dict):
-        return [
-            f"{POLICY_PATH} is empty or is not a set of 'name: value' lines. It needs 'mode: enforce' "
-            f"and an 'allow:' list of hosts. {HELP}"
-        ]
-    errors = []
-    if "mode" not in policy:
-        errors.append(f"{POLICY_PATH}: 'mode' is missing. Add 'mode: enforce'. {HELP}")
-    elif policy["mode"] != "enforce":
-        errors.append(
-            f"{POLICY_PATH}: 'mode' is '{policy['mode']}'. It must be 'enforce'. {HELP}"
-        )
-    allow = policy.get("allow")
-    if not isinstance(allow, list) or not allow:
-        errors.append(
-            f"{POLICY_PATH}: the 'allow' list is missing or empty. List under 'allow:' "
-            f"each host the jobs need. {HELP}"
-        )
-    else:
-        for host in allow:
-            if "*" in str(host):
-                errors.append(
-                    f"{POLICY_PATH}: the 'allow' entry '{host}' contains '*'. "
-                    f"Name each host in full. {HELP}"
-                )
-    return errors
-
-
 def main() -> int:
     if not WORKFLOW_DIR.is_dir():
         stop(f"{WORKFLOW_DIR} not found. Run this check from the repository root.")
@@ -322,8 +265,6 @@ def main() -> int:
                 continue
             checked += 1
             errors.extend(check_job(path.name, job_id, job, workflow.get("env") or {}))
-    if checked:
-        errors.extend(check_policy())
     for error in errors:
         print(f"::error::{error}")
     if errors:

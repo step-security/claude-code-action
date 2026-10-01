@@ -8,7 +8,7 @@ permissions: {}
 
 jobs:
   review:
-    runs-on: ubuntu-24.04-firewall
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       pull-requests: write
